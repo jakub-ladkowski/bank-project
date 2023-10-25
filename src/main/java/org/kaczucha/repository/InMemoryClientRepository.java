@@ -1,14 +1,13 @@
 package org.kaczucha.repository;
 
-import org.kaczucha.Client;
+import org.kaczucha.repository.entity.Client;
 
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class InMemoryClientRepository implements ClientRepository {
-    private Set<Client> clients;
+    private List<Client> clients;
 
-    public InMemoryClientRepository(Set<Client> clients) {
+     public InMemoryClientRepository(List<Client> clients) {
         this.clients = clients;
     }
 
@@ -23,6 +22,6 @@ public class InMemoryClientRepository implements ClientRepository {
                 .stream()
                 .filter(client -> Objects.equals(client.getEmail(), email))
                 .findFirst()
-                .get();
+                .orElseThrow(() -> new NoSuchElementException("Client with following email: %snot found".formatted(email)));
     }
 }

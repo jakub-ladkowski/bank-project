@@ -1,25 +1,34 @@
 package org.kaczucha;
 
-import org.kaczucha.repository.InMemoryClientRepository;
+import org.kaczucha.repository.entity.Account;
+import org.kaczucha.repository.entity.Client;
 import org.kaczucha.service.BankService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 
-public class Main {
-    private BankService bankService;
+@SpringBootApplication
+public class Main implements CommandLineRunner {
+    private final BankService bankService;
 
-
-    public static void main( String[] args ) {
-        new Main().run();
+    @Autowired
+    public Main(BankService bankService) {
+        this.bankService = bankService;
     }
 
-    public void run(){
-        final InMemoryClientRepository repository = new InMemoryClientRepository(new HashSet<>());
-        bankService = new BankService(repository);
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
 
-        try (Scanner scanner = new Scanner(System.in)){
-            while (true){
+    @Override
+    public void run(String... args) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (true) {
                 System.out.println("1 - add user");
                 System.out.println("2 - find user");
                 System.out.println("3 - exit app");
@@ -28,29 +37,35 @@ public class Main {
                     addUser(scanner);
                 }
                 if (next.equals("2")) {
-                    findUser(scanner);
+                    printUser(scanner);
                 }
                 if (next.equals("3")) {
                     break;
                 }
             }
         }
-
     }
 
-    private void findUser(Scanner scanner) {
-        System.out.println("Enter email");
+    private void printUser(Scanner scanner) {
+        System.out.println("Enter email:");
         final String mail = scanner.next();
-        System.out.println(bankService.findByEmail(mail));
+        final Client byEmail = bankService.findByEmail(mail);
+        System.out.println(byEmail);
     }
+
 
     private void addUser(Scanner scanner) {
-        System.out.println("Enter name");
+        System.out.println("Enter name:");
         final String name = scanner.next();
-        System.out.println("Enter email");
+        System.out.println("Enter email:");
         final String mail = scanner.next();
-        System.out.println("Enter balance");
+        System.out.println("Enter balance:");
         final double balance = scanner.nextDouble();
-        bankService.save(new Client(name,mail,balance));
+        final Account account = new Account(balance, "PLN");
+        final List<Account> accounts = List.of(account);
+        bankService.save(new Client(name, mail, accounts));
     }
+
+
+
 }
