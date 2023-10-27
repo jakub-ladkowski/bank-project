@@ -8,23 +8,22 @@ public class JDBCClientRepository implements ClientRepository {
 
     public static final String USER = "postgres";
     public static final String PASSWORD = "qwerty";
-    public static final String JDBC_URL = "jdbc:postgresql://localhost:5432/test";
+    public static final String JDBC_URL = "jdbc:postgresql://127.0.0.1:5432/test";
 
     @Override
     public void save(Client client) {
-
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
             final String name = client.getName();
             final String email = client.getEmail();
-            final PreparedStatement statement = connection.prepareStatement("INSERT INTO USERS(FIRST_NAME,MAIL) VALUES(?,?)");
+            final PreparedStatement statement = connection.prepareStatement("INSERT INTO USERS(FIRST_NAME,MAIL) VALUES (?,?)");
             statement.setString(1, name);
             statement.setString(2, email);
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
 
+    }
 
     @Override
     public Client findByEmail(String email) {

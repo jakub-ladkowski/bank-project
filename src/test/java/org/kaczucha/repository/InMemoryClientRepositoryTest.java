@@ -4,10 +4,10 @@
 //import org.junit.jupiter.api.Test;
 //import org.kaczucha.repository.entity.Client;
 //
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//
 //import java.util.ArrayList;
 //import java.util.List;
+//
+//import static org.junit.jupiter.api.Assertions.assertEquals;
 //
 //public class InMemoryClientRepositoryTest {
 //    private InMemoryClientRepository repository;
@@ -29,7 +29,7 @@
 //        //then
 //        final Client actualClient = clients.get(0);
 //        assertEquals(expectedClient, actualClient);
-//
 //    }
+//
 //
 //}

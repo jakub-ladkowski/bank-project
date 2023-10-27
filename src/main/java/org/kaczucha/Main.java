@@ -1,32 +1,25 @@
 package org.kaczucha;
 
+import org.kaczucha.repository.ClientRepository;
+import org.kaczucha.repository.HibernateClientRepository;
 import org.kaczucha.repository.entity.Account;
 import org.kaczucha.repository.entity.Client;
 import org.kaczucha.service.BankService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
 import java.util.Scanner;
 
-@SpringBootApplication
-public class Main implements CommandLineRunner {
-    private final BankService bankService;
-
-    @Autowired
-    public Main(BankService bankService) {
-        this.bankService = bankService;
-    }
+public class Main {
+    private BankService bankService;
 
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        new Main().run();
     }
 
-    @Override
-    public void run(String... args) {
+    public void run() {
+        final ClientRepository repository = new HibernateClientRepository();
+        bankService = new BankService(repository);
+
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
                 System.out.println("1 - add user");
@@ -65,7 +58,4 @@ public class Main implements CommandLineRunner {
         final List<Account> accounts = List.of(account);
         bankService.save(new Client(name, mail, accounts));
     }
-
-
-
 }
