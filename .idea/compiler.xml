@@ -14,7 +14,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="bank-project" options="" />
+      <module name="bank-project" options="-parameters" />
     </option>
   </component>
 </project>
